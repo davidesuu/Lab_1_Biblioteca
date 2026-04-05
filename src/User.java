@@ -6,7 +6,7 @@ public class User {
 
 
     public User(String name,String registration, Integer age) {
-        if(age < 0){
+        if(age == null){
             throw new RuntimeException("Idade invalida");
         } else if (age < 0) {
             throw new RuntimeException("Volte mais tarde");
