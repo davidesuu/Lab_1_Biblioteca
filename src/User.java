@@ -5,7 +5,14 @@ public class User {
     private boolean hasPhoto;
 
 
-    public User(String registration, String name, Integer age) {
+    public User(String name,String registration, Integer age) {
+        if(age < 0){
+            throw new RuntimeException("Idade invalida");
+        } else if (age < 0) {
+            throw new RuntimeException("Volte mais tarde");
+        } else if (name.isEmpty() || registration.isEmpty()) {
+            throw new RuntimeException("Campo nome ou matricula vazio!");
+        }
         this.registration = registration;
         this.name = name;
         this.age = age;

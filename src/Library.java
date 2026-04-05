@@ -58,14 +58,17 @@ public class Library {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Selecione o numero do livro: ");
         int opc = scanner.nextInt() - 1;
+        scanner.nextLine();
         return books.get(opc);
     }
 
     public void showLoans(String registration) {
+        int i = 1;
         for (Checkout e : checkouts) {
             if (e.getUser().getRegistration().equals(registration)) {
                 System.out.println(e.getUser());
-                System.out.println(e.getBook());
+                System.out.println(i + " - " + e.getBook());
+                i++;
             }
         }
     }
@@ -75,14 +78,15 @@ public class Library {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Selecione o numero do livro: ");
         int opc = scanner.nextInt() - 1;
+        scanner.nextLine();
         return checkouts.get(opc).getBook();
     }
 
     public void devolution(Book book){
         int i = 0;
-        for (Book b : books){
-            if (book == b){
-                b.setBorrowed(false);
+        for (Checkout c :checkouts ){
+            if (book == c.getBook()){
+                c.getBook().setBorrowed(false);
                 this.checkouts.remove(i);
                 break;
             }
