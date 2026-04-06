@@ -4,10 +4,11 @@ import java.util.ArrayList;
 public class Checkout {
     private User user;
     private Book book;
-    private String loanDate;
+    private LocalDate loanDate;
     private Integer borrowedDays;
     private Integer renewalCount;
 
+    private double fine;
     public User getUser() {
         return user;
     }
@@ -16,7 +17,7 @@ public class Checkout {
         return book;
     }
 
-    public String getLoanDate() {
+    public LocalDate getLoanDate() {
         return loanDate;
     }
 
@@ -28,10 +29,24 @@ public class Checkout {
         return renewalCount;
     }
 
+    public void setBorrowedDays() {
+        this.borrowedDays += 1;
+    }
+
+    public double getFine() {
+        return fine;
+    }
+
+    public void setFine(Integer fine) {
+        this.fine += 0.5;
+    }
+
     public Checkout(User user, Book book){
         this.user = user;
-        this.loanDate = LocalDate.now().toString();
+        this.loanDate = LocalDate.now();
         this.book = book;
+        this.fine = 0;
+        this.borrowedDays = 0;
         this.book.setBorrowed(true);
     }
 

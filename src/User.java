@@ -3,6 +3,7 @@ public class User {
     private Integer age;
     private String registration;
     private boolean hasPhoto;
+    private double fine;
 
 
     public User(String name,String registration, Integer age) {
@@ -25,6 +26,14 @@ public class User {
 
     public void setHasFoto() {
         this.hasPhoto = true;
+    }
+
+    public void setFine(double fine){
+        this.fine = fine;
+    }
+
+    public double getFine() {
+        return fine;
     }
 
     public boolean IsHasPhoto() {

@@ -1,3 +1,4 @@
+import javax.swing.text.html.ListView;
 import java.rmi.registry.Registry;
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -59,7 +60,6 @@ public class Main {
 
         try {
             User user = new User(name, registration, age);
-            IO.println("Bem vindo " + user.getName());
             return user;
         } catch (RuntimeException e) {
             IO.println("Erro: " + e.getMessage());
@@ -68,43 +68,77 @@ public class Main {
     }
 
     static void mainMenu(User user, Scanner scanner, Library library){
-        LocalDate date = LocalDate.now();
-        IO.println("Selecione alguma opção:");
+        //IDEIA: Library ter o lacalDate
         int opc;
         do {
+            library.checkFine(user);
+            IO.println("Bem vindo " + user.getName() + " - DATA: " + library.getDate());
             IO.println("1 - Pegar livro");
             IO.println("2 - Devolver livro");
-            IO.println("3 - Dormir");
-            IO.println("4 - Sair");
+            IO.println("3 - Renovar livro");
+            IO.println("4 - Tirar Foto");
+            IO.println("5 - Dormir");
+            IO.println("6 - Sair");
             opc = scanner.nextInt();
             scanner.nextLine();  // pra pegar o \n do buffer
             switch (opc){
                 case 1 -> loanMenu(user, library);
                 case 2 -> retrieveMenu(user, library);
-                case 3 -> sleep(date);
+                case 3 -> renewMenu(library, user);
+                case 4 -> shootPhoto(user);
+                case 5 -> sleep(library, user);
                 default -> IO.println("Opção Invalida!");
             }
-        }while (opc != 4);
+        }while (opc != 6);
     }
 //IDEIA? Integrar o register com o select, no momento o register faz o registro e o select retorna o livro. tudo em uma funçao so?
     static void loanMenu(User user, Library library){
-        IO.println("Digite o numero do livro para escolher: ");
-        Book book = library.selectBooks();  //PROBLEM GRAVe aqui, isso nao vai mais funcionar quando implementar so mostrar quando loaned for false.
-        Checkout checkout = new Checkout(user, book);
-        library.addCheckout(checkout);
-        IO.println("Livro coisado com sucesso!");
+        Book book = library.selectBooks();
+        if (book == null){
+            IO.println("Sem livros disponiveis no momento");
+            return;  //PROBLEM GRAVe aqui, isso nao vai mais funcionar quando implementar so mostrar quando loaned for false.
+        }
+        else library.registerLoan(user, book);
     }
 //Melhorar o print daqui, e o de cima tbm
     static void retrieveMenu(User user, Library library){
-        library.devolution(library.selectLoans(user.getRegistration()));
-        IO.println("Livro devolvido com suucesso");   //PROBLEMA GRAVE Com index aqui quando eu pego os 3 e devolvo tudo
+        if(library.devolution(library.selectLoans(user.getRegistration()))){
+            IO.println("Livro devolvido com suucesso");
+        }
+        else IO.println("Voce nao possui livros no momento");
+        return;//PROBLEMA GRAVE Com index aqui quando eu pego os 3 e devolvo tudo
         //corrigido :) Tava iterando em books, era pra ser em checkouts
     }
 
-    static void sleep(LocalDate date){
-        IO.println("Dia atual: " + date);
-        date = date.plusDays(1);  //Nao funciona ainda, mas é uma ideia
-        IO.println("Agora: " + date);
+    static void shootPhoto(User user){
+        user.setHasFoto();
+        IO.println("Foto tirada com sucesso!");
+    }
+
+    static void sleep(Library library, User user){
+        IO.println("Dia atual: " + library.getDate());
+        library.setDate(library.getDate().plusDays(1));
+        IO.println("Agora: " + library.getDate());
+        if (library.getCheckout().isEmpty()){
+            return;
+        }
+        for(Checkout c : library.getCheckout()) {
+            c.setBorrowedDays();
+        }
+    }
+
+    static void renewMenu(Library library, User user){
+        if(library.getCheckout().isEmpty()){
+            IO.println("Você não tem livros no momento");
+            return;
+        }
+        for (Checkout c : library.getCheckout()) {
+            if (library.selectLoans(user.getRegistration()) == c.getBook()) {
+                library.registerRenew(c);
+                IO.println("Renovado com sucesso!");
+                return;
+            }
+        }
     }
 
 

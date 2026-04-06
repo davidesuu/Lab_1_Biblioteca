@@ -33,6 +33,9 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Titulo: " + this.name + "\nAutor: " + this.author + "\nEdicao: " + this.edition + "\nEmprestado: " + this.isBorrowed;
+        return "Titulo: " + this.name +
+                "\nAutor: " + this.author +
+                "\nEdicao: " + this.edition +
+                "\nEmprestado: " + this.isBorrowed;
     }
 }
