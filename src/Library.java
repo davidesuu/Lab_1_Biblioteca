@@ -39,11 +39,12 @@ public class Library {
     public void registerRenew(Checkout checkout){
         if ((checkout.getRenewalCount()) == 2 ){
             System.out.println("Você nao pode renovar mais do que 2 vezes consecutivas");
-        } else if (checkout.getBorrowedDays() > 10) {
+        } else if (checkout.getBorrowedDays() / (checkout.getRenewalCount()+1) >= 10 ) {
             System.out.println("Prazo pra renovação acabou");
         }
         else{
             checkout.renewLoan();
+            this.books.removeLast();
         }
     }
 
@@ -166,5 +167,13 @@ public class Library {
             i++;
         }
         return false;
+    }
+
+    public void renewLoan(Book book){
+        for (Checkout c :checkouts ){
+            if (book == c.getBook()){
+                registerRenew(c);
+            }
+        }
     }
 }

@@ -21,6 +21,10 @@ public class Checkout {
         return loanDate;
     }
 
+    public void setLoanDate() {
+        this.loanDate = LocalDate.now();
+    }
+
     public Integer getBorrowedDays() {
         return borrowedDays;
     }
@@ -48,6 +52,7 @@ public class Checkout {
         this.fine = 0;
         this.borrowedDays = 0;
         this.book.setBorrowed(true);
+        this.renewalCount = 0;
     }
 
     public void renewLoan(){
