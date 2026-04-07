@@ -68,7 +68,6 @@ public class Main {
     }
 
     static void mainMenu(User user, Scanner scanner, Library library){
-        //IDEIA: Library ter o lacalDate
         int opc;
         do {
             library.checkFine(user);
@@ -91,23 +90,21 @@ public class Main {
             }
         }while (opc != 6);
     }
-//IDEIA? Integrar o register com o select, no momento o register faz o registro e o select retorna o livro. tudo em uma funçao so?
+
     static void loanMenu(User user, Library library){
         Book book = library.selectBooks();
-        if (book == null){
+        if (book == null) {
             IO.println("Sem livros disponiveis no momento");
-            return;  //PROBLEM GRAVe aqui, isso nao vai mais funcionar quando implementar so mostrar quando loaned for false.
+            return;
         }
         else library.registerLoan(user, book);
     }
-//Melhorar o print daqui, e o de cima tbm
+
     static void retrieveMenu(User user, Library library){
         if(library.devolution(library.selectLoans(user.getRegistration()))){
             IO.println("Livro devolvido com suucesso");
         }
         else IO.println("Voce nao possui livros no momento");
-        return;//PROBLEMA GRAVE Com index aqui quando eu pego os 3 e devolvo tudo
-        //corrigido :) Tava iterando em books, era pra ser em checkouts
     }
 
     static void shootPhoto(User user){
@@ -144,9 +141,3 @@ public class Main {
 
 }
 
-
-//Fazer verificaçao dos if na hora de pegar os livros ja indisponiveis
-//Menu
-//Fazer verificaçao de dias
-//fazer funçao dormir
-//Fazer o print da data no checkout
